@@ -14,8 +14,16 @@ const dbInsert = async (collection, payload) => {
   return await db.collection(collection)[insert](payload)
 }
 
-const dbFind = async (collection, payload) => {
-  return await db.collection(collection).find(payload).toArray()
+const dbFind = async (collection, payload, options) => {
+  let res = await db.collection(collection).find(payload)
+
+  if (options) {
+    if (options.sort) {
+      res = res.sort(options.sort)
+    }
+  }
+  
+  return res.toArray()
 }
 
 const dbFindByObjectId = async (collection, id) => {
