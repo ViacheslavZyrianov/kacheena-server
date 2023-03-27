@@ -175,6 +175,30 @@ app.delete('/club', async ({ query: { id } }, res) => {
   res.send(result)
 })
 
+app.get('/weights', async ({ query: { traineeId } }, res) => {
+  const result = await dbFind('weights', { traineeId }, { sort: { date: 1 } })
+
+  res.send(result)
+})
+
+app.post('/weight', async ({ body }, res) => {
+  const { insertedId } = await dbInsert('weights', body)
+
+  res.send(insertedId)
+})
+
+app.put('/weight', async ({ body: { id, ...rest } }, res) => {
+  const result = await dbFindOneByObjectIdAndUpdate('weights', id, rest)
+
+  res.send(result)
+})
+
+app.delete('/weight', async ({ query: { id } }, res) => {
+  const result = await dbFindOneByObjectIdAndDelete('weights', id)
+
+  res.send(result)
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
