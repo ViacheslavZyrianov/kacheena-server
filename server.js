@@ -92,6 +92,12 @@ app.get('/trainees', async ({ query }, res) => {
   res.send(result)
 })
 
+app.delete('/trainee', async ({ query: { id } }, res) => {
+  const result = await dbFindOneByObjectIdAndDelete('users', id)
+
+  res.send(result)
+})
+
 app.post('/training-schedule', async ({ body }, res) => {
   const { startFromDate, schedule, duration } = body
 
