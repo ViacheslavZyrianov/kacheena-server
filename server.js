@@ -115,8 +115,8 @@ app.put('/training-schedule', async ({ body: { id, ...rest } }, res) => {
   res.send(result)
 })
 
-app.get('/training-schedules', async ({ query: { trainneId } }, res) => {
-  const result = await dbFind('training-schedules', { trainneId })
+app.get('/training-schedules', async ({ query: { traineeId } }, res) => {
+  const result = await dbFind('training-schedules', { traineeId })
 
   res.send(result)
 })
