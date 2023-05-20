@@ -22,6 +22,8 @@ const port = 3000
 
 app.use(cors({ origin: process.env.APP_CORS_ORIGIN }))
 
+app.options('*', cors())
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
