@@ -33,7 +33,7 @@ const oauth2Client = new google.auth.OAuth2(
 
 dbConnect()
 
-app.get('init', async (req, res) => {
+app.get('/init', async (req, res) => {
   res.send('ok')
 })
 
