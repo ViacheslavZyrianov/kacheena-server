@@ -33,6 +33,10 @@ const oauth2Client = new google.auth.OAuth2(
 
 dbConnect()
 
+app.get('init', async (req, res) => {
+  res.send('ok')
+})
+
 app.post('/oauth/google', async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
   res.setHeader('Access-Control-Allow-Origin', '*')
