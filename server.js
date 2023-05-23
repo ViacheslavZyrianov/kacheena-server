@@ -34,7 +34,11 @@ const oauth2Client = new google.auth.OAuth2(
 dbConnect()
 
 app.get('/init', async (req, res) => {
-  res.send('ok')
+  try {
+    res.send('ok')
+  } catch (err) {
+    res.send(err)
+  }
 })
 
 app.post('/oauth/google', async (req, res) => {
