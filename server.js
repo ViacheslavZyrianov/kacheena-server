@@ -218,6 +218,8 @@ app.delete('/weight', async ({ query: { id } }, res) => {
   res.send(result)
 })
 
-app.listen(() => {
-  console.log(`Example app listening on port ${process.env.PORT}`)
+const port = 3000 || process.env.PORT
+
+app.listen(port, () => {
+  console.log(`Server listens on port ${port}`)
 })
