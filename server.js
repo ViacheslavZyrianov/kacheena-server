@@ -22,6 +22,12 @@ const port = 3000
 
 app.use(cors())
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
+})
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -42,36 +48,25 @@ app.get('/init', async (req, res) => {
 })
 
 app.post('/oauth/google', async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-  'Access-Control-Allow-Headers',
-  'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
+  try {
+    const { tokens: { access_token, id_token } } = await oauth2Client.getToken(req.body.code)
 
-  res.send({ key: 'value' })
-//  try {
-//    const { tokens: { access_token, id_token } } = await oauth2Client.getToken(req.body.code)
-//
-//    const { data } = await axios.get(
-//      process.env.GOOGLE_AUTH_TOKEN_REQUEST_URL,
-//      {
-//        params: {
-//          alt: 'json',
-//          access_token
-//        }
-//      },
-//      { headers: { Authorization: `Bearer ${id_token}` } }
-//    )
-//
-//    res.send(data)
-//
-//  } catch (err) {
-//    res.send(err)
-//  }
+    const { data } = await axios.get(
+      process.env.GOOGLE_AUTH_TOKEN_REQUEST_URL,
+      {
+        params: {
+          alt: 'json',
+          access_token
+        }
+      },
+      { headers: { Authorization: `Bearer ${id_token}` } }
+    )
+
+    res.send(data)
+
+  } catch (err) {
+    res.send(err)
+  }
 })
 
 app.post('/user/create', async ({ body }, res) => {
