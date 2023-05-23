@@ -20,13 +20,7 @@ const generateReccurentTrainingScheduleByDaysOfTheWeek = require('./utils/genera
 const app = express()
 const port = 3000
 
-app.use(cors({ origin: process.env.APP_CORS_ORIGIN }))
-
-app.use(function (request, response, next) {
-  response.header('Access-Control-Allow-Origin', '*')
-  response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
+app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
