@@ -34,25 +34,26 @@ const oauth2Client = new google.auth.OAuth2(
 dbConnect()
 
 app.post('/oauth/google', async (req, res) => {
-  try {
-    const { tokens: { access_token, id_token } } = await oauth2Client.getToken(req.body.code)
-
-    const { data } = await axios.get(
-      process.env.GOOGLE_AUTH_TOKEN_REQUEST_URL,
-      {
-        params: {
-          alt: 'json',
-          access_token
-        }
-      },
-      { headers: { Authorization: `Bearer ${id_token}` } }
-    )
-
-    res.send(data)
-
-  } catch (err) {
-    res.send(err)
-  }
+  res.send({ key: 'value' })
+//  try {
+//    const { tokens: { access_token, id_token } } = await oauth2Client.getToken(req.body.code)
+//
+//    const { data } = await axios.get(
+//      process.env.GOOGLE_AUTH_TOKEN_REQUEST_URL,
+//      {
+//        params: {
+//          alt: 'json',
+//          access_token
+//        }
+//      },
+//      { headers: { Authorization: `Bearer ${id_token}` } }
+//    )
+//
+//    res.send(data)
+//
+//  } catch (err) {
+//    res.send(err)
+//  }
 })
 
 app.post('/user/create', async ({ body }, res) => {
