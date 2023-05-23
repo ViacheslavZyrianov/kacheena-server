@@ -18,7 +18,6 @@ require('dotenv').config()
 const generateReccurentTrainingScheduleByDaysOfTheWeek = require('./utils/generateReccurentTrainingScheduleByDaysOfTheWeek')
 
 const app = express()
-const port = 3000
 
 app.use(cors())
 
@@ -219,6 +218,6 @@ app.delete('/weight', async ({ query: { id } }, res) => {
   res.send(result)
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+app.listen(() => {
+  console.log(`Example app listening on port ${process.env.PORT}`)
 })
