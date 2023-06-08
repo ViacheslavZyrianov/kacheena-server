@@ -15,6 +15,7 @@ const {
 
 require('dotenv').config()
 
+const bcrypt = require('bcrypt')
 const generateReccurentTrainingScheduleByDaysOfTheWeek = require('./utils/generateReccurentTrainingScheduleByDaysOfTheWeek')
 
 const app = express()
@@ -77,6 +78,34 @@ app.post('/oauth/google', async (req, res) => {
 
   } catch (err) {
     res.send(err)
+  }
+})
+
+app.post('/auth/register', async ({ body }, res) => {
+  const data = await dbFind('users', { login: body.login })
+
+  if (data) res.sendStatus(409)
+
+  // const salt = await bcrypt.genSalt(10)
+  // body.hashed = await bcrypt.hash(body.password, salt)
+
+  // const { insertedId } = await dbInsert('users', body)
+  // res.send(insertedId)
+})
+
+app.post('/auth/login', async ({ body: { login, password } }, res) => {
+  const data = await dbFind('users', { login })
+
+  if (data) {
+    const isSuccess = await bcrypt.compare(password, data.hashed)
+    if (isSuccess) {
+      res.send({
+        id: data._id,
+        name: data.name
+      })
+    } else res.sendStatus(401)
+  } else {
+    res.sendStatus(401)
   }
 })
 
