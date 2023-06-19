@@ -86,11 +86,11 @@ app.post('/auth/register', async ({ body }, res) => {
 
   if (data) res.sendStatus(409)
 
-  // const salt = await bcrypt.genSalt(10)
-  // body.hashed = await bcrypt.hash(body.password, salt)
+  const salt = await bcrypt.genSalt(10)
+  body.hashed = await bcrypt.hash(body.password, salt)
 
-  // const { insertedId } = await dbInsert('users', body)
-  // res.send(insertedId)
+  const { insertedId } = await dbInsert('users', body)
+  res.send(insertedId)
 })
 
 app.post('/auth/login', async ({ body: { login, password } }, res) => {
