@@ -84,7 +84,7 @@ app.post('/oauth/google', async (req, res) => {
 app.post('/auth/register', async ({ body }, res) => {
   const data = await dbFind('users', { login: body.login })
 
-  if (data) res.sendStatus(409)
+  if (data.length) res.sendStatus(409)
 
   const salt = await bcrypt.genSalt(10)
   body.hashed = await bcrypt.hash(body.password, salt)
