@@ -51,9 +51,9 @@ const oauth2Client = new google.auth.OAuth2(
 
 dbConnect()
 
-app.get('/init', async (req, res) => {
+app.get('/init', (_, res) => {
   try {
-    res.send('ok')
+    res.send('Connected to API!')
   } catch (err) {
     res.send(err)
   }
@@ -96,7 +96,7 @@ app.post('/auth/register', async ({ body }, res) => {
 app.post('/auth/login', async ({ body: { login, password } }, res) => {
   const data = await dbFind('users', { login })
 
-  if (data) {
+  if (data.length) {
     const isSuccess = await bcryptjs.compare(password, data.hashed)
     if (isSuccess) {
       res.send({
