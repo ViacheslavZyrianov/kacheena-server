@@ -96,7 +96,7 @@ app.post('/auth/register', async ({ body }, res) => {
 app.post('/auth/login', async ({ body: { login, password } }, res) => {
   const data = await dbFind('users', { login })
 
-  if (data.length) {
+  if (data) {
     const isSuccess = await bcryptjs.compare(password, data.hashed)
     if (isSuccess) {
       res.send({
