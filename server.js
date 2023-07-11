@@ -84,13 +84,16 @@ app.post('/oauth/google', async (req, res) => {
 app.post('/auth/register', async ({ body }, res) => {
   const data = await dbFind('users', { login: body.login })
 
-  if (data.length) res.sendStatus(409)
-
-  const salt = await bcryptjs.genSalt(10)
-  body.hashed = await bcryptjs.hash(body.password, salt)
-
-  const { insertedId } = await dbInsert('users', body)
-  res.send(insertedId)
+  if (data) res.sendStatus(409)
+  else {
+    const salt = await bcryptjs.genSalt(10)
+    body.hashed = await bcryptjs.hash(body.password, salt)
+  
+    delete body.password
+  
+    const { insertedId } = await dbInsert('users', body)
+    res.send(insertedId)
+  }
 })
 
 app.post('/auth/login', async ({ body: { login, password } }, res) => {
