@@ -25,9 +25,7 @@ const dbFind = async (collection, payload, options) => {
 
   const resArr = await res.toArray()
 
-  if (resArr.length === 0) return null
-  else if (resArr.length === 1) return resArr[0]
-  else return resArr
+  return resArr.length ? resArr : null
 }
 
 const dbFindByObjectId = async (collection, id) => {
