@@ -23,9 +23,7 @@ const dbFind = async (collection, payload, options) => {
     }
   }
 
-  const resArr = await res.toArray()
-
-  return resArr.length ? resArr : null
+  return await res.toArray()
 }
 
 const dbFindByObjectId = async (collection, id) => {
