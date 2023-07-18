@@ -10,7 +10,8 @@ const {
   dbFindByObjectId,
   dbFindOneAndUpdate,
   dbFindOneByObjectIdAndUpdate,
-  dbFindOneByObjectIdAndDelete
+  dbFindOneByObjectIdAndDelete,
+  dbFindManyAndRemoveField
 } = require('./db.js')
 
 require('dotenv').config()
@@ -232,10 +233,11 @@ app.put('/club', async ({ body: { id, ...rest } }, res) => {
   res.send(result)
 })
 
-app.delete('/club', async ({ query: { id } }, res) => {
-  const result = await dbFindOneByObjectIdAndDelete('clubs', id)
+app.delete('/club', async ({ query: { club, trainerId } }, res) => {
+  await dbFindOneByObjectIdAndDelete('clubs', club)
+  await dbFindManyAndRemoveField('users', { club, trainerId }, 'club')
 
-  res.send(result)
+  res.sendStatus(204)
 })
 
 app.get('/weights', async ({ query: { traineeId } }, res) => {
