@@ -44,6 +44,10 @@ const dbFindOneByObjectIdAndDelete = async (collection, id) => {
   return await db.collection(collection).findOneAndDelete({ _id: new ObjectId(id) })
 }
 
+const dbFindManyAndRemoveField = async (collection, search, field) => {
+  return await db.collection(collection).updateMany(search, { $unset: { [field]: '' }})
+}
+
 module.exports = {
   dbConnect,
   dbInsert,
@@ -51,5 +55,6 @@ module.exports = {
   dbFindByObjectId,
   dbFindOneAndUpdate,
   dbFindOneByObjectIdAndUpdate,
-  dbFindOneByObjectIdAndDelete
+  dbFindOneByObjectIdAndDelete,
+  dbFindManyAndRemoveField
 }
