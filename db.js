@@ -26,12 +26,16 @@ const dbFind = async (collection, payload, options) => {
   return await res.toArray()
 }
 
+const dbFindByKey = async (collection, key) => {
+  return await db.collection(collection).find({[key]: {$exists: true}}).toArray()
+}
+
 const dbFindByObjectId = async (collection, id) => {
   return await db.collection(collection).find({ _id: new ObjectId(id) }).toArray()
 }
 
 const dbFindOneAndUpdate = async (collection, filter, update) => {
-  return await db.collection(collection).findOneAndUpdate(filter, { $set: update })
+  return await db.collection(collection).findOneAndUpdate(filter, update, { upsert: true })
 }
 
 const dbFindOneByObjectIdAndUpdate = async (collection, id, update) => {
@@ -46,10 +50,15 @@ const dbFindManyAndRemoveField = async (collection, search, field) => {
   return await db.collection(collection).updateMany(search, { $unset: { [field]: '' }})
 }
 
+const dbUpdateOne = async (collection, payload) => {
+  return await db.collection(collection).dbUpdateOne(search, { $unset: { [field]: '' }})
+}
+
 module.exports = {
   dbConnect,
   dbInsert,
   dbFind,
+  dbFindByKey,
   dbFindByObjectId,
   dbFindOneAndUpdate,
   dbFindOneByObjectIdAndUpdate,

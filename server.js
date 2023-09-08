@@ -17,7 +17,9 @@ const {
 require('dotenv').config()
 
 const bcryptjs = require('bcryptjs')
+
 const generateReccurentTrainingScheduleByDaysOfTheWeek = require('./utils/generateReccurentTrainingScheduleByDaysOfTheWeek')
+const generateJsonKey = require('./utils/generateJsonKey')
 
 const app = express()
 
@@ -133,7 +135,11 @@ app.get('/user/get', async ({ query: { id, googleId } }, res) => {
 })
 
 app.post('/user/update-user-trainer-id', async ({ body: { id, trainerId } }, res) => {
-  const result = await dbFindOneAndUpdate('users', { id }, { trainerId })
+  const result = await dbFindOneAndUpdate(
+    'users',
+    { id },
+    { $set: { trainerId } }
+  )
 
   res.send(result)
 })
@@ -211,6 +217,47 @@ app.put('/exercise', async ({ body: { id, ...rest } }, res) => {
 
 app.delete('/exercise', async ({ query: { id } }, res) => {
   const result = await dbFindOneByObjectIdAndDelete('exercises', id)
+
+  res.send(result)
+})
+
+app.get('/exercises-types', async ({ query: { trainerId } }, res) => {
+  const [result] = await dbFind('exercises-types', { trainerId })
+
+  if (result) {
+    const { list } = result
+    res.send(list)
+  } else {
+    res.send([])
+  }
+})
+
+app.post('/exercises-types', async ({ body: { trainerId, exercise } }, res) => {
+  await dbFindOneAndUpdate(
+    'exercises-types',
+    { trainerId },
+    { $set: { [`list.${[generateJsonKey(exercise)]}`]: exercise } }
+  )
+
+  res.sendStatus(201)
+})
+
+app.put('/exercises-types', async ({ body: { trainerId, list } }, res) => {
+  const result = await dbFindOneAndUpdate(
+    'exercises-types',
+    { trainerId },
+    { $set: { list } }
+  )
+
+  res.send(result)
+})
+
+app.delete('/exercises-types', async ({ query: { trainerId, id } }, res) => {
+  const result = await dbFindOneAndUpdate(
+    'exercises-types',
+    { trainerId },
+    { $unset: { [`list.${id}`]: 1 } }
+  )
 
   res.send(result)
 })
