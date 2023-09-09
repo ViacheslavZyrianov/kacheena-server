@@ -262,6 +262,47 @@ app.delete('/exercises-types', async ({ query: { trainerId, id } }, res) => {
   res.send(result)
 })
 
+app.get('/exercises-muscles', async ({ query: { trainerId } }, res) => {
+  const [result] = await dbFind('exercises-muscles', { trainerId })
+
+  if (result) {
+    const { list } = result
+    res.send(list)
+  } else {
+    res.send([])
+  }
+})
+
+app.post('/exercises-muscles', async ({ body: { trainerId, exercise } }, res) => {
+  await dbFindOneAndUpdate(
+    'exercises-muscles',
+    { trainerId },
+    { $set: { [`list.${[generateJsonKey(exercise)]}`]: exercise } }
+  )
+
+  res.sendStatus(201)
+})
+
+app.put('/exercises-muscles', async ({ body: { trainerId, list } }, res) => {
+  const result = await dbFindOneAndUpdate(
+    'exercises-muscles',
+    { trainerId },
+    { $set: { list } }
+  )
+
+  res.send(result)
+})
+
+app.delete('/exercises-muscles', async ({ query: { trainerId, id } }, res) => {
+  const result = await dbFindOneAndUpdate(
+    'exercises-muscles',
+    { trainerId },
+    { $unset: { [`list.${id}`]: 1 } }
+  )
+
+  res.send(result)
+})
+
 app.get('/clubs', async ({ query: { trainerId } }, res) => {
   const result = await dbFind('clubs', { trainerId })
 
