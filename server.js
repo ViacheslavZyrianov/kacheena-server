@@ -228,7 +228,7 @@ app.get('/exercises-types', async ({ query: { trainerId } }, res) => {
     const { list } = result
     res.send(list)
   } else {
-    res.send([])
+    res.send({})
   }
 })
 
@@ -269,7 +269,7 @@ app.get('/exercises-muscles', async ({ query: { trainerId } }, res) => {
     const { list } = result
     res.send(list)
   } else {
-    res.send([])
+    res.send({})
   }
 })
 
