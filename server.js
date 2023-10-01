@@ -9,6 +9,7 @@ const {
   dbFind,
   dbFindByObjectId,
   dbFindOneAndUpdate,
+  dbFindByIdFirstInArrayAndUpdate,
   dbFindOneByObjectIdAndUpdate,
   dbFindOneByObjectIdAndDelete,
   dbFindManyAndRemoveField
@@ -193,6 +194,23 @@ app.get('/training-schedules', async ({ query: { traineeId } }, res) => {
 
 app.delete('/training-schedule', async ({ query: { id } }, res) => {
   const result = await dbFindOneByObjectIdAndDelete('training-schedules', id)
+
+  res.send(result)
+})
+
+app.put('/training-schedule/item/time', async ({ body: { id, date, time } }, res) => {
+  const result = await dbFindByIdFirstInArrayAndUpdate(
+    'training-schedules',
+    id,
+    {
+      keyToFind: 'schedule.date',
+      valueToFind: date
+    },
+    {
+      keyToUpdate: 'schedule.$.time',
+      valueToUpdate: time
+    }
+  )
 
   res.send(result)
 })
