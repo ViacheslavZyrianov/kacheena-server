@@ -38,6 +38,13 @@ const dbFindOneAndUpdate = async (collection, filter, update) => {
   return await db.collection(collection).findOneAndUpdate(filter, update, { upsert: true })
 }
 
+const dbFindByIdFirstInArrayAndUpdate = async (collection, id, { keyToFind, valueToFind }, { keyToUpdate, valueToUpdate }) => {
+  return await db.collection(collection).updateOne(
+    { _id: new ObjectId(id), [keyToFind]: valueToFind },
+    { $set: { [keyToUpdate]: valueToUpdate } }
+  )
+}
+
 const dbFindOneByObjectIdAndUpdate = async (collection, id, update) => {
   return await db.collection(collection).findOneAndUpdate({ _id: new ObjectId(id) }, { $set: update })
 }
@@ -61,6 +68,7 @@ module.exports = {
   dbFindByKey,
   dbFindByObjectId,
   dbFindOneAndUpdate,
+  dbFindByIdFirstInArrayAndUpdate,
   dbFindOneByObjectIdAndUpdate,
   dbFindOneByObjectIdAndDelete,
   dbFindManyAndRemoveField
