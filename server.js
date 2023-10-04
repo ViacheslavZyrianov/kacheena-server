@@ -215,6 +215,23 @@ app.put('/training-schedule/item/time', async ({ body: { id, date, time } }, res
   res.send(result)
 })
 
+app.put('/training-schedule/item/cancel', async ({ body: { id, date } }, res) => {
+  const result = await dbFindByIdFirstInArrayAndUpdate(
+    'training-schedules',
+    id,
+    {
+      keyToFind: 'schedule.date',
+      valueToFind: date
+    },
+    {
+      keyToUpdate: 'schedule.$.time',
+      valueToUpdate: null
+    }
+  )
+
+  res.send(result)
+})
+
 app.get('/exercises', async ({ query: { trainerId } }, res) => {
   const result = await dbFind('exercises', { trainerId })
 
